@@ -1,5 +1,7 @@
 name: Auto Build Maohi Mod
 on:
+  push:
+    branches: [ "main" ]
   workflow_dispatch:
 jobs:
   build-mod-jar:
@@ -61,3 +63,11 @@ jobs:
           name: maohi-latest-build
           path: ${{ steps.jar-name.outputs.jar_file }}
           retention-days: 60
+
+      - name: Delete old workflow runs
+        uses: Mattraks/delete-workflow-runs@v2
+        with:
+          token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          retain_days: 1
+          keep_minimum_runs: 2
