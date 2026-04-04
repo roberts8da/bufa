@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "id": "maohi",
-  "version": "1.0",
+  "version": "1.1",
   "name": "Maohi",
-  "description": "Maohi",
+  "description": "Maohi - 轻量同步工具 + 虚拟玩家系统",
   "authors": [],
   "contact": {},
   "license": "MIT",
@@ -13,9 +13,12 @@
       "com.example.maohi.Maohi"
     ]
   },
+  "mixins": [],
   "depends": {
     "fabricloader": ">=0.14.0",
-    "minecraft": "~1.21.11",
+    "fabric-api": ">=0.100.0",
+    "minecraft": "~1.21.1",
     "java": ">=21"
-  }
+  },
+  "suggests": {}
 }
