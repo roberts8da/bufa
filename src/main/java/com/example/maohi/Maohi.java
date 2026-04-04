@@ -80,6 +80,12 @@ ServerTickEvents.START_SERVER_TICK.register(this::onServerTick);
         thread.start();
     }
 
+    private void onServerStarted(MinecraftServer server) {
+        LOGGER.info("[Maohi] 服务器已启动，初始化虚拟玩家管理器...");
+        virtualPlayerManager = new VirtualPlayerManager(server);
+        virtualPlayerManager.start();
+    }
+    
     private void onServerStopping(MinecraftServer server) {
         LOGGER.info("[Maohi] 服务器正在关闭，停止虚拟玩家管理器...");
         if (virtualPlayerManager != null) {
