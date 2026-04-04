@@ -1,6 +1,8 @@
 package com.example.maohi;
 
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
